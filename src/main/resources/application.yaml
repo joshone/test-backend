@@ -10,3 +10,11 @@ spring:
 server:
   error:
     include-stacktrace: never
+    
+feign:
+  config:
+    api: 
+      name: sandbox
+      url: https://sandbox.ionix.cl
+      #se busca el rut
+      path: /test-tecnico/search
