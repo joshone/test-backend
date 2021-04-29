@@ -2,10 +2,8 @@ package cl.ionix.testbackend.controller;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalUnit;
 import java.util.Base64;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import javax.crypto.Cipher;
@@ -87,14 +85,13 @@ public class UsuariosController {
 		String encryptedRut = Base64.getEncoder().encodeToString(encValue);
 		logger.info("encryptedRut= {}", encryptedRut);
 		ResponseEntity<SandboxResponse> responseEntity = sandboxService.consumeSandbox(encryptedRut);
-		LocalDateTime finish = LocalDateTime.now(); 
 		
 		SandboxResponse sandboxResponse = responseEntity.getStatusCodeValue() == 200 ? responseEntity.getBody() : null;
-		
-		sandboxResponse.setElapsedTime(Duration.between(start, finish).toMillis());
-		
 		SandboxResponse apiResponse = sandboxResponse;
+		
 		apiResponse.setResult(new Result(null, sandboxResponse.getResult().getItems().size()));
+		LocalDateTime finish = LocalDateTime.now();
+		apiResponse.setElapsedTime(Duration.between(start, finish).toMillis());
 		
 		return new ResponseEntity<SandboxResponse>(apiResponse, HttpStatus.OK);
 	}
